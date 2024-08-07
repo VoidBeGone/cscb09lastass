@@ -5,7 +5,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #include <stdlib.h>
-#define MAX_SIZE 30
+#define MAX_SIZE 31
 
 int main(int argc, char **argv){
 	if (argc < 2){
@@ -64,7 +64,7 @@ int main(int argc, char **argv){
 		num_receive = 0;
 		ssize_t total_read = 0;
 
-		while ((num_receive = read(cfd, response + total_read, 11 -total_read -1)) > 0){
+		while ((num_receive = read(cfd, response + total_read, sizeof(response) -total_read -1)) > 0){
 			total_read += num_receive;
 			if (strchr(response, '\n') != NULL){
 				break;
@@ -80,13 +80,11 @@ int main(int argc, char **argv){
 				close(cfd);
 				exit(1);
 		}
-
 		if (strchr(response, '\n') == NULL){
 			fprintf(stderr, "ERROR FROM SERVER SENDING");
 			close(cfd);
 			exit(1);
 		}
-		response[10] = '\0';
 		printf("%s",response);
 	}
 	close(cfd);
